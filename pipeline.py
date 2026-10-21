@@ -111,7 +111,7 @@ def validate_row(record, unit):
         "shipment_id": record["shipment_id"],
         "origin": record["origin"],
         "destination": record["destination"],
-        "weight_kg": round(weight, 3),
+        "weight_kg": rounded_weight,
     }
 
     return valid, None
