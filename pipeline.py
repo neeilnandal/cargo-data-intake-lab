@@ -79,6 +79,7 @@ def validate_row(record, unit):
 
     for field in ("origin", "destination"):
         value = record[field]
+        
         if (
             len(value) != 3
             or not value.isascii()
@@ -96,7 +97,8 @@ def validate_row(record, unit):
 
     if unit == "lb":
         weight *= POUNDS_TO_KG
-        rounded_weight = round(weight, 3)
+    
+    rounded_weight = round(weight, 3)
 
     if rounded_weight <= 0:
         return None, "weight_below_precision"
