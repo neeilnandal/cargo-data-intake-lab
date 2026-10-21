@@ -203,10 +203,10 @@ def run_pipeline(data_dir=DATA_DIR, output_dir=OUTPUT_DIR):
         summary["input_records"]
         != summary["accepted_records"]
         + summary["rejected_records"]
-):
+    ):
         raise RuntimeError(
-        "Record reconciliation failed: input count "
-        "does not equal accepted plus rejected count"
+            "Record reconciliation failed: input count "
+            "does not equal accepted plus rejected count"
     )    
     
 
