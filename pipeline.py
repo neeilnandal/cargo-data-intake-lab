@@ -1,10 +1,14 @@
-
+%%writefile /content/cargo-data-intake-lab/pipeline.py
 import csv
 import json
 import logging
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent
+try:
+    BASE_DIR = Path(__file__).resolve().parent
+except NameError:
+    BASE_DIR = Path.cwd()
+
 DATA_DIR = BASE_DIR / "data"
 OUTPUT_DIR = BASE_DIR / "output"
 
@@ -79,13 +83,13 @@ def validate_row(record, unit):
         if len(value) != 3 or not value.isalpha():
             return None, f"invalid_{field}"
 
-    if not record["weight"]:
-    return None, "missing_weight"
+    if not record.get("weight"):
+        return None, "missing_weight"
 
-try:
-    weight = float(record["weight"])
-except ValueError:
-    return None, "invalid_weight"
+    try:
+        weight = float(record["weight"])
+    except ValueError:
+        return None, "invalid_weight"
 
     if not (0 < weight < float("inf")):
         return None, "nonpositive_or_nonfinite_weight"
@@ -136,15 +140,7 @@ def run_pipeline(data_dir=DATA_DIR, output_dir=OUTPUT_DIR):
 
             required = set(config["columns"].values())
             missing = required - set(reader.fieldnames)
-            
-            unexpected = set(reader.fieldnames) - required
 
-            if unexpected:
-                logging.warning(
-                     "%s: unexpected source columns: %s",
-                     client,
-                     sorted(unexpected),
-                )
             if missing:
                 raise ValueError(
                     f"{client}: missing columns {sorted(missing)}"
@@ -198,17 +194,11 @@ def run_pipeline(data_dir=DATA_DIR, output_dir=OUTPUT_DIR):
         "by_client": counts,
     }
 
-    
-    if (
+    assert (
         summary["input_records"]
-        != summary["accepted_records"]
+        == summary["accepted_records"]
         + summary["rejected_records"]
-    ):
-        raise RuntimeError(
-            "Record reconciliation failed: input count "
-            "does not equal accepted plus rejected count"
-    )    
-    
+    )
 
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -238,4 +228,3 @@ if __name__ == "__main__":
         format="%(levelname)s: %(message)s",
     )
     print(json.dumps(run_pipeline(), indent=2))
-    
