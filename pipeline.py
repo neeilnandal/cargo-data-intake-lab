@@ -1,4 +1,3 @@
-%%writefile /content/cargo-data-intake-lab/pipeline.py
 import csv
 import json
 import logging
@@ -135,15 +134,32 @@ def run_pipeline(data_dir=DATA_DIR, output_dir=OUTPUT_DIR):
         ) as file:
             reader = csv.DictReader(file)
 
-            if not reader.fieldnames:
+                        if not reader.fieldnames:
                 raise ValueError(f"{client}: empty schema")
 
+            headers = reader.fieldnames
+
+            if len(headers) != len(set(headers)):
+                raise ValueError(
+                    f"{client}: duplicate CSV column names"
+                )
+
             required = set(config["columns"].values())
-            missing = required - set(reader.fieldnames)
+            actual = set(headers)
+
+            missing = required - actual
+            unexpected = actual - required
 
             if missing:
                 raise ValueError(
                     f"{client}: missing columns {sorted(missing)}"
+                )
+
+            if unexpected:
+                logging.warning(
+                    "%s: unexpected source columns: %s",
+                    client,
+                    sorted(unexpected),
                 )
 
             for row_number, row in enumerate(reader, start=2):
