@@ -140,11 +140,11 @@ def run_pipeline(data_dir=DATA_DIR, output_dir=OUTPUT_DIR):
             unexpected = set(reader.fieldnames) - required
 
             if unexpected:
-               logging.warning(
-        "%s: unexpected source columns: %s",
-        client,
-        sorted(unexpected),
-    )
+                logging.warning(
+                     "%s: unexpected source columns: %s",
+                     client,
+                     sorted(unexpected),
+                )
             if missing:
                 raise ValueError(
                     f"{client}: missing columns {sorted(missing)}"
