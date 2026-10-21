@@ -79,13 +79,13 @@ def validate_row(record, unit):
         if len(value) != 3 or not value.isalpha():
             return None, f"invalid_{field}"
 
-    try:
-        weight = float(record["weight"])
-    except ValueError:
-        return None, "invalid_weight"
-    
     if not record["weight"]:
-        return None, "missing_weight"
+    return None, "missing_weight"
+
+try:
+    weight = float(record["weight"])
+except ValueError:
+    return None, "invalid_weight"
 
     if not (0 < weight < float("inf")):
         return None, "nonpositive_or_nonfinite_weight"
