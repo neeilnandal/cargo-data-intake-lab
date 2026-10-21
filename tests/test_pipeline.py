@@ -114,7 +114,74 @@ class TestCargoPipeline(unittest.TestCase):
                 ValueError, "missing columns"
             ):
                 run_pipeline(data, root / "output")
+    def test_non_ascii_airport_rejected(self):
+        record = {
+            "client": "client_a",
+            "source_row": 2,
+            "shipment_id": "AWB100",
+            "origin": "ÄMS",
+            "destination": "JFK",
+            "weight": "100",
+        }
 
+        valid, error = validate_row(record, "kg")
+        self.assertIsNone(valid)
+        self.assertEqual(error, "invalid_origin")
+
+    def test_tiny_weight_rejected(self):
+        record = {
+            "client": "client_a",
+            "source_row": 2,
+            "shipment_id": "AWB101",
+            "origin": "AMS",
+            "destination": "JFK",
+            "weight": "0.00001",
+        }
+
+        valid, error = validate_row(record, "kg")
+        self.assertIsNone(valid)
+        self.assertEqual(error, "weight_below_precision")
+
+
+    def test_duplicate_csv_headers_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            data = root / "data"
+            data.mkdir()
+
+            (data / "client_a.csv").write_text(
+                "shipment_id,origin,origin,"
+                "destination,weight_kg\n"
+                "AWB001,AMS,FRA,JFK,100\n",
+                encoding="utf-8",
+            )
+
+            (data / "client_b.csv").write_text(
+                (DATA_DIR / "client_b.csv").read_text(
+                    encoding="utf-8"
+                ),
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(
+                ValueError, "duplicate CSV column names"
+            ):
+                run_pipeline(data, root / "output")
+                
+
+   def test_invalid_weight_text_rejected(self):
+        record = {
+            "client": "client_a",
+            "source_row": 2,
+            "shipment_id": "AWB102",
+            "origin": "AMS",
+            "destination": "JFK",
+            "weight": "not-a-number",
+        }
+
+        valid, error = validate_row(record, "kg")
+        self.assertIsNone(valid)
+        self.assertEqual(error, "invalid_weight")
 
 if __name__ == "__main__":
     unittest.main()
