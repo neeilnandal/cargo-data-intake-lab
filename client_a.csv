@@ -1,0 +1,5 @@
+shipment_id,origin,destination,weight_kg
+AWB001,AMS,JFK,850
+AWB002,FRA,SIN,420
+AWB003,AMS,,500
+AWB001,AMS,JFK,850

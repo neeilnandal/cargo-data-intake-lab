@@ -1,0 +1,5 @@
+airwaybill,from_airport,to_airport,weight_lb
+AWB004,LHR,DXB,1200
+AWB005,CDG,AMS,660
+AWB006,FRA,SIN,-20
+AWB007,AMS,JFK,invalid
