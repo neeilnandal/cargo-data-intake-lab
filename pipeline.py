@@ -141,12 +141,12 @@ def run_pipeline(data_dir=DATA_DIR, output_dir=OUTPUT_DIR):
         ) as file:
             reader = csv.DictReader(file)
 
-                        if not reader.fieldnames:
+           if not reader.fieldnames:
                 raise ValueError(f"{client}: empty schema")
 
-            headers = reader.fieldnames
+           headers = reader.fieldnames
 
-            if len(headers) != len(set(headers)):
+           if len(headers) != len(set(headers)):
                 raise ValueError(
                     f"{client}: duplicate CSV column names"
                 )
@@ -223,7 +223,7 @@ def run_pipeline(data_dir=DATA_DIR, output_dir=OUTPUT_DIR):
         + summary["rejected_records"]
     ):
         
-    raise RuntimeError(
+        raise RuntimeError(
             "Record reconciliation failed: input count "
             "does not equal accepted plus rejected count"
         )
