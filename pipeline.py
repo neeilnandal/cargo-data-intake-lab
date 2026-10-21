@@ -79,7 +79,12 @@ def validate_row(record, unit):
 
     for field in ("origin", "destination"):
         value = record[field]
-        if len(value) != 3 or not value.isalpha():
+        if (
+    len(value) != 3
+    or not value.isascii()
+    or not value.isalpha()
+):
+    return None, f"invalid_{field}"
             return None, f"invalid_{field}"
 
     if not record.get("weight"):
