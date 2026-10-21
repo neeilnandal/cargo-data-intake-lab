@@ -169,7 +169,7 @@ class TestCargoPipeline(unittest.TestCase):
                 run_pipeline(data, root / "output")
                 
 
-       def test_invalid_weight_text_rejected(self):
+    def test_invalid_weight_text_rejected(self):
         record = {
             "client": "client_a",
             "source_row": 2,
