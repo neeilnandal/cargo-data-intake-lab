@@ -98,8 +98,8 @@ class TestCargoPipeline(unittest.TestCase):
             data.mkdir()
 
             (data / "client_a.csv").write_text(
-                "shipment_id,origin,weight_kg\n"
-                "AWB001,AMS,100\n",
+            "shipment_id,origin,weight_kg\n"
+            "AWB001,AMS,100\n",
                 encoding="utf-8",
             )
 
@@ -143,17 +143,17 @@ class TestCargoPipeline(unittest.TestCase):
         self.assertEqual(error, "weight_below_precision")
 
 
-    def test_duplicate_csv_headers_rejected(self):
+     def test_duplicate_csv_headers_rejected(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             data = root / "data"
             data.mkdir()
 
             (data / "client_a.csv").write_text(
-                "shipment_id,origin,origin,"
-                "destination,weight_kg\n"
-                "AWB001,AMS,FRA,JFK,100\n",
-                encoding="utf-8",
+            "shipment_id,origin,origin,"
+            "destination,weight_kg\n"
+            "AWB001,AMS,FRA,JFK,100\n",
+            encoding="utf-8",
             )
 
             (data / "client_b.csv").write_text(
@@ -169,7 +169,7 @@ class TestCargoPipeline(unittest.TestCase):
                 run_pipeline(data, root / "output")
                 
 
-   def test_invalid_weight_text_rejected(self):
+       def test_invalid_weight_text_rejected(self):
         record = {
             "client": "client_a",
             "source_row": 2,
@@ -180,6 +180,7 @@ class TestCargoPipeline(unittest.TestCase):
         }
 
         valid, error = validate_row(record, "kg")
+
         self.assertIsNone(valid)
         self.assertEqual(error, "invalid_weight")
 
