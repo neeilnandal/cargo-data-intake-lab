@@ -19,7 +19,7 @@ This project demonstrates how heterogeneous synthetic cargo datasets can be tran
 - Generates record-level error reasons and processing summaries.
 - Detects missing required source columns.
 - Produces deterministic results across repeated executions.
-- Includes six automated unit tests.
+- Includes ten automated unit tests covering data validation, exception handling and deterministic processing.
 
 ## 3. Technology
 
@@ -80,16 +80,20 @@ The pipeline creates:
 python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-**Validation result:** All six tests passed during development in Google Colab.
+**Validation result:** All 10 automated tests passed from a fresh clone of the published GitHub repository, alongside successful Python compilation and pipeline execution.
 
 Tests cover:
 
 1. Pounds-to-kilograms conversion.
 2. Missing destination detection.
 3. Negative weight rejection.
-4. Input reconciliation and duplicate detection.
+4. Input reconciliation and duplicate shipment detection.
 5. Deterministic reruns.
 6. Missing required source-column detection.
+7. Invalid non-numeric weight rejection.
+8. Duplicate CSV column-header detection.
+9. Non-ASCII airport-code rejection.
+10. Tiny positive weights that would round to zero.
 
 ## 7. Engineering decisions
 
