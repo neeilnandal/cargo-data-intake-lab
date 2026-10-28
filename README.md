@@ -2,6 +2,8 @@
 
 A lightweight, tested Python data-engineering demonstrator for multi-client data ingestion, standardisation, validation and exception handling.
 
+IntegrityGate (integrity-gate/): extends this pipeline into reason-coded exception registers for bank client data, reconciliations and project finance facilities.
+
 ## 1. Problem
 
 When customer datasets enter operational software products, field names, measurement units and data quality can differ.
